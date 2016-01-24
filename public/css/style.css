@@ -1,0 +1,12 @@
+body {
+    background: #eee;
+}
+
+.ui.vertical.menu .header.item {
+    background: #f9f9f9;
+}
+
+p[align] {
+    margin: 0 !important;
+    padding: 0;
+}

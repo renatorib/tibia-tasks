@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tibia Tasks</title>
+    <link rel="stylesheet" href="vendor/semantic/dist/semantic.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <template id="home">
+        <p align="center">
+            <i class="icons huge">
+                <i class="huge inverted sun icon"></i>
+                <i class="big grey inverted paw icon"></i>
+            </i>
+        </p>
+    </template>
+
+    <template id="createcharacters">
+            <div class="ui form">
+                <div class="two fields">
+                    <div class="field">
+                        <label>Account</label>
+                        <input type="text" v-model="account" placeholder="Account">
+                    </div>
+                    <div class="field">
+                        <label>Password</label>
+                        <input type="password" v-model="password" placeholder="Password">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="six wide field">
+                        <label>
+                            Name template
+                            <i  class="help icon popup"
+                                data-title="How to use name templates"
+                                data-content="(number): Number of letters of a word. Example: '(8) (8)' will generate two words with 8 letters.">
+                            </i>
+                        </label>
+                        <input type="text" v-model="name" placeholder="Name template" value="(12)">
+                    </div>
+                    <div class="three wide field">
+                        <label>Sex</label>
+                        <select class="ui fluid dropdown" v-model="sex">
+                            <option value="male" selected>Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="four wide field">
+                        <label>World</label>
+                        <select class="ui fluid dropdown" v-model="world">
+                            <option v-for="world in worlds" :value="world">{{world}}</option>
+                        </select>
+                    </div>
+                    <div class="three wide field">
+                        <label>Qty</label>
+                        <input type="number" v-model="qty" value="20">
+                    </div>
+                </div>
+                <p align="right">
+                    <button @click="create" class="ui inverted button green">Create</button>
+                </p>
+            </div>
+    </template>
+
+    <!-- #### -->
+
+    <div id="app">
+
+        <div class="ui top fixed menu">
+            <div class="ui container">
+                <span class="item">
+                    <strong>Tibia Tasks</strong>
+                </span>
+            </div>
+        </div>
+        <br><br><br><br>
+
+        <div class="ui stackable grid container">
+
+            <div class="five wide column">
+                <div class="ui fluid vertical menu">
+                    <div class="header item">Tasks</div>
+                    <a @click="goto('createcharacters')" class="green item" :class="{'active': active == 'createcharacters'}">
+                        <i class="users icon"></i> Create Characters
+                    </a>
+                </div>
+            </div>
+
+            <div class="eleven wide column">
+                <div class="ui top attached message">
+                    <h3 class="ui header">{{page.title}}</h3>
+                </div>
+                <div class="ui bottom attached segment">
+                    <component :is="active"></component>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        var jQuery = require('jquery');
+        var $ = jQuery;
+    </script>
+    <script src="vendor/vue/dist/vue.min.js"></script>
+    <script src="vendor/semantic/dist/semantic.js"></script>
+    <script>
+
+
+        var _ = require('lodash');
+
+        function semanticdef() {
+            $('.ui.dropdown').dropdown();
+            $('.popup').popup();
+            $('.popup.help').popup({inline:true});
+        }
+
+        var pages = {
+            home: {
+                title: "Tibia Tasks",
+                template: '#home'
+            },
+            createcharacters: {
+                title: 'Create Characters',
+                template: '#createcharacters',
+                data: function(){
+                    return {
+                        worlds: ["Amera", "Antica", "Astera", "Aurea", "Aurera", "Aurora", "Bellona",
+                        "Beneva", "Calmera", "Calva", "Calvera", "Candia", "Celesta", "Chrona",
+                        "Danera", "Dolera", "Efidia", "Eldera", "Elera", "Elysia", "Fidera",
+                        "Fortera", "Garnera", "Guardia", "Harmonia", "Honera", "Hydera", "Inferna",
+                        "Iona", "Irmada", "Julera", "Justera", "Kenora", "Kronera", "Luminera", "Magera",
+                        "Menera", "Morta", "Mortera", "Neptera", "Nerana", "Nika", "Olympa", "Pacera",
+                        "Premia", "Pythera", "Quilia", "Refugia", "Rowana", "Secura", "Shivera", "Silvera",
+                        "Solera", "Tenebra", "Thera", "Umera", "Unitera", "Valoria", "Veludera", "Vinera",
+                        "Xantera", "Yanara", "Zanera"]
+                    }
+                },
+                attached: function(){
+                    semanticdef();
+                }
+            }
+        }
+
+        var datapages = {};
+        _.forEach(pages, function(props, name){
+            datapages[name] = {title: props.title};
+        });
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                active: 'home',
+                pages: datapages
+            },
+            computed: {
+                page: function(){
+                    return this.pages[this.active];
+                }
+            },
+            methods: {
+                goto: function(page){
+                    return this.active = page;
+                },
+                check: function(page){
+                    return this.active == page;
+                }
+            },
+            components: pages
+        });
+    </script>
+</body>
+</html>
