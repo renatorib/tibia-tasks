@@ -22,9 +22,9 @@ async.series([
                 var nameGen = random(name);
                 tibia.createCharacter(nameGen, sex, world, function(success){
                     if(success){
-                        next(null, nameGen);
+                        next(null, 'Created: ' + nameGen);
                     } else {
-                        next();
+                        next(null, 'Failed to create: ' + nameGen);
                     }
                 });
             });
